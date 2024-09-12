@@ -14,7 +14,7 @@ export default function Home() {
 
   const keyHandle = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && inputValue) {
-      setToDos([...toDos, inputValue]);
+      setToDos([inputValue, ...toDos]);
       setCheckBoxList([false, ...checkBoxList]);
       setInputValue('');
     }
@@ -32,6 +32,16 @@ export default function Home() {
     setInputValue('');
   };
 
+  const xButtonHandle = (index: number) => {
+    const toDosCopy = [...toDos];
+    toDosCopy.splice(index, 1);
+    const checkBoxListCopy = [...checkBoxList];
+    checkBoxListCopy.splice(index, 1);
+
+    setToDos(toDosCopy);
+    setCheckBoxList(checkBoxListCopy);
+  };
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -43,7 +53,7 @@ export default function Home() {
 
         <Table>
           <TableBody>
-            {[...toDos].reverse().map((x, index) => (
+            {[...toDos].map((x, index) => (
               <TableRow key={index}>
                 <TableCell className="font-medium">
                   <Checkbox
@@ -52,11 +62,36 @@ export default function Home() {
                   ></Checkbox>
                 </TableCell>
                 <TableCell
-                  className={`font-medium ${
+                  className={`font-medium  ${
                     checkBoxList[index] ? 'line-through' : ''
                   }`}
                 >
                   {x}
+                </TableCell>
+                <TableCell>
+                  <button
+                    type="button"
+                    className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    onClick={() => xButtonHandle(index)}
+                  >
+                    <span className="sr-only">Close menu</span>
+
+                    <svg
+                      className="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
                 </TableCell>
               </TableRow>
             ))}
